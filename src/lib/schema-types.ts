@@ -26,7 +26,7 @@ export namespace schemaTypes {
 
             this.keydef = keydef;
         }
-        validate(data: Array<any> | any): any {
+        validate(data: Array<any> | any, strictmode?: boolean): any {
 
             // holder for output
             let out: any;
@@ -34,8 +34,14 @@ export namespace schemaTypes {
             // try to validate the value
             try {
 
-                // check required number of values
-                if ((this.keydef.maxNumValues !== undefined && this.keydef.maxNumValues > 1) || this.keydef.numValues > 1) {
+                // check if strict mode is on
+                if (data === undefined && strictmode === false) {
+
+                    // just return the data
+                    out = undefined;
+
+                    // check if array
+                } else if ((this.keydef.maxNumValues !== undefined && this.keydef.maxNumValues > 1) || this.keydef.numValues > 1) {
 
                     // if field is not required then an undefined value might be passed and this needs to be corrected
                     if (this.keydef.numValues === 0 && data === undefined) {
@@ -73,7 +79,7 @@ export namespace schemaTypes {
             } catch (err) {
 
                 // check if any data is supplied and if it is required to be
-                if (data === undefined && this.keydef.numValues != 0) {
+                if (data === undefined && this.keydef.numValues != 0 && strictmode !== false) {
                     throw new Error(erros.DATA_REQUIRED);
                 } else {
                     throw err;
@@ -140,7 +146,7 @@ export namespace schemaTypes {
             this.type = type;
 
         }
-        validate(data: any) {
+        validate(data: any, strictmode?: boolean) {
 
             // loop all the tests
             let errosFound: any = {};
@@ -165,8 +171,13 @@ export namespace schemaTypes {
                 try {
 
                     // try to perform the validation
-                    passed[test] = this.type[test].validate(data[test]);
+                    passed[test] = this.type[test].validate(data[test], strictmode);
                     delete source[test];
+
+                    // check if we can use value for anything
+                    if (strictmode === false && data[test] === undefined) {
+                        delete passed[test];
+                    }
 
                     // catch the erros
                 } catch (e) {
@@ -218,7 +229,7 @@ export namespace schemaTypes {
                 }
             }
         }
-        validate(data: any) {
+        validate(data: any, strictmode?: boolean) {
 
             // loop all the tests
             let erros = [];
@@ -230,7 +241,7 @@ export namespace schemaTypes {
                 try {
 
                     // try to perform the validation
-                    passed.push(test.validate(data));
+                    passed.push(test.validate(data, strictmode));
 
                     // catch the erros
                 } catch (e) {

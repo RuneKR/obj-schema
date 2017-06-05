@@ -20,5 +20,5 @@ export interface SingleElementDefinition {
 
 export interface SchemaValidation {
     [key: string]: any;
-    validate(data: any): any
+    validate(data: any, strictmode?: boolean): any
 }

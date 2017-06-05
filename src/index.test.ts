@@ -37,6 +37,21 @@ describe('Validation', function () {
         expect(() => schema.validate(['true'])).to.throw(Error, lib.erros.DATA_TOO_SHORT);
     });
 
+    it('allows checks for array length to be disabled', function () {
+
+        let schema = setType(dataTypes.OneKeyMinMany);
+
+        expect(schema.validate(undefined, false)).to.equal(undefined);
+    });
+
+     it('it doesnt set undefined fields to undefined', function () {
+
+        let schema = setType(dataTypes.MultiKey);
+
+        let obj = { handsome: true };
+        expect(Object.keys(schema.validate(obj, false))).to.have.same.members(Object.keys(obj));
+    });
+
     it('supports multiple types', function () {
 
         let schema = setType(dataTypes.OneKey, dataTypes.OneKeyOneValue);

@@ -1,6 +1,6 @@
 {
   "name": "@ords/obj-schema",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Perform schema validation in typescript",
   "main": "dist/index",
   "typings": "dist/index",

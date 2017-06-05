@@ -29,8 +29,8 @@ let bool: lib.SingleElementDefinition {
 
 // custom type
 let myCustom: lib.SingleElementDefinition {
-    numValues: 0,                          // not required
-    maxNumValues: 2                        // maximum length leave empty of unlimited
+    numValues: 2,                          // required minium one
+    maxNumValues: 3                        // maximum length leave empty of unlimited
     customValidator: (data: any) => {
         
             // this validator just lets everything pass
@@ -51,9 +51,9 @@ schema.validate('true')
 let schema = setType(myCustom);
 schema.validate(['true', 'true'])
 
-// also works and output is undefined
-let schema = setType(myCustom);
-schema.validate()
+// disables strictmode and thereby required minima is ignored
+let schema = setType(bool);
+schema.validate(['true'],false)
 
 // this works
 let schema = setType(CustomGoat);
