@@ -1,5 +1,6 @@
 import { SingleElementDefinition, SchemaValidation } from './interfaces';
 import { erros } from './errors';
+import { isSchema, isDefinition } from './is-schema';
 
 export namespace schemaTypes {
 
@@ -12,6 +13,11 @@ export namespace schemaTypes {
          * Constructs values can have
          */
         constructor(keydef: SingleElementDefinition) {
+
+            // check that it is actually a definition
+            if (!isDefinition(keydef)) {
+                throw new Error(erros.NOT_DEFINITION);
+            }
 
             if (keydef.customValidator) {
                 this.validateValue = keydef.customValidator;
@@ -113,7 +119,26 @@ export namespace schemaTypes {
     export class SchemaMultiKey implements SchemaValidation {
         private type: { [key: string]: SchemaKey };
         constructor(type: { [key: string]: SchemaKey }) {
+
+            // prepare found erros
+            let foundErros: any = {};
+
+            // check the keys to see if they needs to be build
+            for (let test in type) {
+
+                if (isDefinition(type[test])) {
+
+                    foundErros[test] = new Error(erros.NOT_SCHEMA);
+                }
+            }
+
+            // check length of errors
+            if (Object.keys(foundErros).length != 0) {
+                throw foundErros;
+            }
+
             this.type = type;
+
         }
         validate(data: any) {
 
@@ -150,7 +175,6 @@ export namespace schemaTypes {
                 }
             }
 
-
             // no extra keys should be present
             if (Object.keys(source).length !== 0) {
 
@@ -182,13 +206,12 @@ export namespace schemaTypes {
 
             for (let sometype of types) {
 
-                // prepre to check if validate key exists
-                let keys: any = Object.keys(sometype);
+                // if it already is a schema then just push it to the tests
+                if (isSchema(sometype)) {
 
-                // check if vlidate key exists
-                if ((typeof sometype[keys[0]] === 'object')
-                    && ('validate' in sometype[keys[0]])
-                    && (typeof sometype[keys[0]]['validate'] === 'function')) {
+                    this.tests.push(sometype);
+
+                } else if (!isDefinition(sometype)) {
                     this.tests.push(new SchemaMultiKey(sometype));
                 } else {
                     this.tests.push(new SchemaKey(sometype));

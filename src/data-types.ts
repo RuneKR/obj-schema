@@ -25,14 +25,20 @@ export namespace dataTypes {
         numValues: 1,
         maxNumValues: 1,
         customValidator: (data: any) => {
-            
+
             // this validator just lets everything pass
             return data;
         }
     }
 
+    export const ChildToParent = setType(dataTypes.OneKey);
+
     export const MultiKey = {
         handsome: setType(dataTypes.OneKeyOneValue),
-        pretty: setType(dataTypes.OneKey)
+        pretty: setType({
+            valueset: { true: true, false: false },
+            numValues: 1,
+            maxNumValues: 2
+        })
     }
 }

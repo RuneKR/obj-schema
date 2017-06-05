@@ -1,8 +1,9 @@
 import { expect } from 'chai';
-import { setType, lib, dataTypes } from './';
+import { setType, lib } from './';
+import { dataTypes } from './data-types';
 
 describe('Validation', function () {
-   it('replace supplied value with that of the valueset', function () {
+    it('replace supplied value with that of the valueset', function () {
 
         let schema = setType(dataTypes.OneKeyOneValue);
         expect(schema.validate('true')).to.equal(true);
@@ -68,5 +69,11 @@ describe('Validation', function () {
 
         let schema = setType(dataTypes.Custom);
         expect(schema.validate('true')).to.equal('true');
+    });
+
+    it('parses schema from child to parent', function () {
+
+        let schema = setType(dataTypes.ChildToParent, dataTypes.OneKeyOneValue);
+        expect(schema.validate('true')).to.equal(true);
     });
 });
