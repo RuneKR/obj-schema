@@ -1,0 +1,28 @@
+{
+  "name": "@ords/obj-schema",
+  "version": "1.0.0",
+  "description": "Perform schema validation in typescript",
+  "main": "dist/index",
+  "typings": "dist/index",
+  "scripts": {
+    "test": "tsc; mocha dist/*.test.*",
+    "clean": "./scripts/cleanBuild.sh",
+    "build-depoly": "tsc",
+    "build-env": "npm install && typings install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ords/obj-schema.git"
+  },
+  "keywords": [
+    "schema",
+    "validation"
+  ],
+  "author": "Rune k. Rasmussen",
+  "license": "MIT",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "chai": "^3.5.0"
+  }
+}
