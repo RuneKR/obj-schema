@@ -21,7 +21,6 @@ export namespace dataTypes {
     }
 
     export const Custom: SingleElementDefinition = {
-        valueset: { true: true, false: false },
         numValues: 1,
         maxNumValues: 1,
         customValidator: (data: any) => {

@@ -31,59 +31,54 @@ export namespace schemaTypes {
             // holder for output
             let out: any;
 
-            // try to validate the value
-            try {
+            // check if strict mode is on
+            if (data === undefined && strictmode === false) {
 
-                // check if strict mode is on
-                if (data === undefined && strictmode === false) {
+                // just return the data
+                out = undefined;
 
-                    // just return the data
-                    out = undefined;
+                // check if array
+            } else if ((this.keydef.maxNumValues !== undefined && this.keydef.maxNumValues > 1) || this.keydef.numValues > 1) {
 
-                    // check if array
-                } else if ((this.keydef.maxNumValues !== undefined && this.keydef.maxNumValues > 1) || this.keydef.numValues > 1) {
-
-                    // if field is not required then an undefined value might be passed and this needs to be corrected
-                    if (this.keydef.numValues === 0 && data === undefined) {
-                        data = [];
-                    }
-
-                    // check that minimum values are supplied
-                    if (this.keydef.numValues > data.length) {
-                        throw new Error(erros.DATA_TOO_SHORT);
-                    }
-
-                    // throw new error if data is not true
-                    if (Array.isArray(data) !== true) {
-                        throw new Error(erros.DATA_NOT_ARRAY);
-                    }
-
-                    // check length
-                    if (this.keydef.maxNumValues !== undefined && data.length > this.keydef.maxNumValues) {
-                        throw new Error(erros.DATA_TOO_LONG);
-                    }
-
-                    // create holder for output values
-                    out = [];
-
-                    // check the values are okay
-                    for (let subdata of data) {
-
-                        // check that value is okay
-                        out.push(this.validateValue(subdata));
-                    }
-                } else {
-
-                    out = this.validateValue(data);
+                // if field is not required then an undefined value might be passed and this needs to be corrected
+                if (this.keydef.numValues === 0 && data === undefined) {
+                    data = [];
                 }
-            } catch (err) {
 
-                // check if any data is supplied and if it is required to be
+                // check that minimum values are supplied
+                if (this.keydef.numValues > data.length) {
+                    throw new Error(erros.DATA_TOO_SHORT);
+                }
+
+                // throw new error if data is not true
+                if (Array.isArray(data) !== true) {
+                    throw new Error(erros.DATA_NOT_ARRAY);
+                }
+
+                // check length
+                if (this.keydef.maxNumValues !== undefined && data.length > this.keydef.maxNumValues) {
+                    throw new Error(erros.DATA_TOO_LONG);
+                }
+
+                // create holder for output values
+                out = [];
+
+                // check the values are okay
+                for (let subdata of data) {
+
+                    // check that value is okay
+                    out.push(this.validateValue(subdata));
+                }
+
+                // check minimum number of values
+
+            } else {
+
                 if (data === undefined && this.keydef.numValues != 0 && strictmode !== false) {
                     throw new Error(erros.DATA_REQUIRED);
-                } else {
-                    throw err;
-                }
+                } 
+                
+                out = this.validateValue(data);
             }
 
             return out;
