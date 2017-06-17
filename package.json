@@ -1,6 +1,6 @@
 {
   "name": "@ords/obj-schema",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Perform schema validation in typescript",
   "main": "dist/index",
   "typings": "dist/index",
@@ -20,9 +20,10 @@
   ],
   "author": "Rune k. Rasmussen",
   "license": "MIT",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@types/chai": "^4.0.0",
+    "@types/mocha": "^2.2.41",
     "chai": "^3.5.0"
   }
 }
