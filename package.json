@@ -7,8 +7,7 @@
   "scripts": {
     "test": "tsc; mocha dist/*.test.*",
     "clean": "./scripts/cleanBuild.sh",
-    "build-depoly": "tsc",
-    "build-env": "npm install && typings install"
+    "prepare": "tsc"
   },
   "repository": {
     "type": "git",
